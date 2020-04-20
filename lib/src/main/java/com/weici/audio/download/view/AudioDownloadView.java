@@ -14,10 +14,10 @@ import com.weici.audio.download.MediaPlayerManager;
  */
 public class AudioDownloadView extends android.support.v7.widget.AppCompatTextView implements IAudioDownloadView {
 
-    private AudioDownloadViewHelper audioDownloadViewHelper;
+    protected AudioDownloadViewHelper audioDownloadViewHelper;
 
 
-    private IDownloadConfig iDownloadConfig;
+    protected IDownloadConfig iDownloadConfig;
 
     public AudioDownloadView(Context context) {
         this(context, null);
