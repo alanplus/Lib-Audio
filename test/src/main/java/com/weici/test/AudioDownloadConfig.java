@@ -17,19 +17,16 @@ public class AudioDownloadConfig implements IDownloadConfig {
 
     @Override
     public String getUrl() {
-        return "http://source.weicistudy.com/pcaudio/sound/altitude.aac";
+        return "";
     }
 
     @Override
     public String getDestName(String s) {
-        return "/data/data/com.weici.test/audio./" + s;
+        return "/data/data/com.weici.test/audio/" + s;
     }
 
     @Override
     public String getAudioName() {
-        if (name.startsWith("/pcaudio/speech/")) {
-            return name.replace("/pcaudio/speech/", "");
-        }
         return name;
     }
 }
