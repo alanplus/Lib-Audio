@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+
+    <declare-styleable name="AudioViewStyle">
+        <attr name="audio_type" format="enum">
+            <enum name="audio_type_auto" value="0" />
+            <enum name="audio_type_assets" value="1" />
+            <enum name="audio_type_file" value="2" />
+            <enum name="audio_type_net" value="3" />
+        </attr>
+        <attr name="default_backgroud" format="reference" />
+        <attr name="anim_backgroud" format="reference" />
+        <attr name="loading_drawable" format="reference" />
+        <attr name="anim" format="reference" />
+        <attr name="audio" format="reference|string" />
+        <attr name="anim_type" format="enum">
+            <!-- 背景帧动画 -->
+            <enum name="type_bg" value="0" />
+            <!-- 背景静态 透明度变化 或者属性动画 -->
+            <enum name="type_anim_bg" value="1" />
+        </attr>
+    </declare-styleable>
+
+
+</resources>

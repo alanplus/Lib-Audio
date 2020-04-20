@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <!-- Audio Image tag -->
+    <item name="tag_audio_path" type="id" />
+    <item name="tag_audio_type" type="id" />
+
+    <item name="tag_audio_default_bg" type="id" />
+    <!-- tag_anim_type ==1 时 有效 -->
+    <item name="tag_audio_anim_bg" type="id" />
+
+    <item name="tag_audio_anim" type="id" />
+    <item name="tag_anim_type" type="id" />
+    <item name="tag_loading" type="id" />
+
+</resources>
