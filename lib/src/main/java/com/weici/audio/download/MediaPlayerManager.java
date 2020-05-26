@@ -196,7 +196,7 @@ public class MediaPlayerManager implements IMediaStateChangeListener {
     @Override
     public void onPauseStateListener() {
 
-        if (null == mView){
+        if (null == mView) {
             if (null != onMediaPlayStateListener) {
                 onMediaPlayStateListener.onPauseStateListener();
             }
@@ -233,7 +233,7 @@ public class MediaPlayerManager implements IMediaStateChangeListener {
     @Override
     public void onDestroyStateListener() {
 
-        if (null == mView){
+        if (null == mView) {
             if (null != onMediaPlayStateListener) {
                 onMediaPlayStateListener.onDestroyStateListener();
             }
@@ -253,7 +253,7 @@ public class MediaPlayerManager implements IMediaStateChangeListener {
     @Override
     public void onIdleStateListener() {
 
-        if (null == mView){
+        if (null == mView) {
             if (null != onMediaPlayStateListener) {
                 onMediaPlayStateListener.onIdleStateListener();
             }
@@ -305,5 +305,14 @@ public class MediaPlayerManager implements IMediaStateChangeListener {
         });
     }
 
+    public void destroy() {
+        try {
+            mView = null;
+            xmMediaPlayer.destroy();
+            mediaplayerManager = null;
+        } catch (Exception e) {
+            Log.e("audio_error", Log.getStackTraceString(e));
+        }
+    }
 
 }
