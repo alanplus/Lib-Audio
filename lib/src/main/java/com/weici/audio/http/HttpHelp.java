@@ -23,8 +23,7 @@ import okhttp3.Response;
  */
 public class HttpHelp {
 
-    public static void download(String url, Callback callback) {
-        OkHttpClient client = initClient();
+    public static void download(OkHttpClient client, String url, Callback callback) {
         Request.Builder builder = new Request.Builder();
         Request request = builder.url(url).build();
         client.newCall(request).enqueue(callback);
@@ -66,12 +65,6 @@ public class HttpHelp {
         throw new Exception("request is error");
     }
 
-    private static OkHttpClient initClient() {
-        OkHttpClient.Builder builder = new OkHttpClient.Builder();
-        builder.readTimeout(1, TimeUnit.MINUTES);
-        builder.writeTimeout(1, TimeUnit.MINUTES);
-        builder.connectTimeout(1, TimeUnit.MINUTES);
-        return builder.build();
-    }
+
 
 }

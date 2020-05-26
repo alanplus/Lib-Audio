@@ -21,8 +21,10 @@ import com.weici.audio.http.HttpHelp;
 import java.io.File;
 import java.io.IOException;
 import java.lang.ref.WeakReference;
+import java.util.concurrent.TimeUnit;
 
 import okhttp3.Call;
+import okhttp3.OkHttpClient;
 import okhttp3.Response;
 
 
@@ -33,6 +35,8 @@ public class XmMediaPlayer
     public static final int AUDIO_FILE_TYPE_ASSETS = 1;
     public static final int AUDIO_FILE_TYPE_FILE = 2;
     public static final int AUDIO_FILE_TYPE_NET = 3;
+
+    private OkHttpClient okHttpClient;
 
     @Override
     public void onBufferingUpdate(MediaPlayer mp, int percent) {
@@ -263,7 +267,7 @@ public class XmMediaPlayer
 
         setState(IMediaStateChangeListener.STATE_LOADING, 0);
 
-        HttpHelp.download(iDownloadConfig.getUrl(), new okhttp3.Callback() {
+        HttpHelp.download(getHttpClient(), iDownloadConfig.getUrl(), new okhttp3.Callback() {
             @Override
             public void onFailure(Call call, IOException e) {
                 setState(IMediaStateChangeListener.STATE_ERROR, IMediaStateChangeListener.ERROR_CANNOT_PLAY);
@@ -368,5 +372,16 @@ public class XmMediaPlayer
         } catch (Exception e) {
             setState(IMediaStateChangeListener.STATE_ERROR, IMediaStateChangeListener.ERROR_CANNOT_PLAY);
         }
+    }
+
+    public OkHttpClient getHttpClient() {
+        if (null == okHttpClient) {
+            OkHttpClient.Builder builder = new OkHttpClient.Builder();
+            builder.readTimeout(1, TimeUnit.MINUTES);
+            builder.writeTimeout(1, TimeUnit.MINUTES);
+            builder.connectTimeout(1, TimeUnit.MINUTES);
+            okHttpClient = builder.build();
+        }
+        return okHttpClient;
     }
 }
