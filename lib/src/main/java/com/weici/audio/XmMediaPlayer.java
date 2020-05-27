@@ -38,6 +38,8 @@ public class XmMediaPlayer
 
     private OkHttpClient okHttpClient;
 
+    private Call call;
+
     @Override
     public void onBufferingUpdate(MediaPlayer mp, int percent) {
 
@@ -119,6 +121,7 @@ public class XmMediaPlayer
     public void destroy() {
         stop();
         setState(IMediaStateChangeListener.STATE_DESTROY, 0);
+        destroyHttpClient();
         if (null != mMediaPlayer) {
             new Thread(new Runnable() {
                 @Override
@@ -132,6 +135,20 @@ public class XmMediaPlayer
             }).start();
         }
     }
+
+    public void destroyHttpClient() {
+        if (null == okHttpClient || okHttpClient.dispatcher() == null) {
+            return;
+        }
+        for (Call call : okHttpClient.dispatcher().queuedCalls()) {
+            call.cancel();
+        }
+        for (Call call : okHttpClient.dispatcher().runningCalls()) {
+            call.cancel();
+        }
+        okHttpClient = null;
+    }
+
 
     private MediaPlayer getMediaPlayer() {
         if (mMediaPlayer != null) {
@@ -267,7 +284,12 @@ public class XmMediaPlayer
 
         setState(IMediaStateChangeListener.STATE_LOADING, 0);
 
-        HttpHelp.download(getHttpClient(), iDownloadConfig.getUrl(), new okhttp3.Callback() {
+        if (call != null && !call.isCanceled()) {
+            call.cancel();
+            call = null;
+        }
+
+        call = HttpHelp.download(getHttpClient(), iDownloadConfig.getUrl(), new okhttp3.Callback() {
             @Override
             public void onFailure(Call call, IOException e) {
                 setState(IMediaStateChangeListener.STATE_ERROR, IMediaStateChangeListener.ERROR_CANNOT_PLAY);

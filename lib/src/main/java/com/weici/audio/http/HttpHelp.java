@@ -9,6 +9,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.util.concurrent.TimeUnit;
 
+import okhttp3.Call;
 import okhttp3.Callback;
 import okhttp3.MediaType;
 import okhttp3.OkHttpClient;
@@ -23,10 +24,12 @@ import okhttp3.Response;
  */
 public class HttpHelp {
 
-    public static void download(OkHttpClient client, String url, Callback callback) {
+    public static Call download(OkHttpClient client, String url, Callback callback) {
         Request.Builder builder = new Request.Builder();
         Request request = builder.url(url).build();
-        client.newCall(request).enqueue(callback);
+        Call call = client.newCall(request);
+        call.enqueue(callback);
+        return call;
     }
 
 
