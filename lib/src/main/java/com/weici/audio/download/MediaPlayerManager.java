@@ -54,11 +54,10 @@ public class MediaPlayerManager implements IMediaStateChangeListener {
                 this.mView = view;
                 xmMediaPlayer.play(name, iDownloadConfig, this);
             } else {
-                xmMediaPlayer.destroy();
+                xmMediaPlayer.stop();
                 xmMediaPlayer.setiMediaStateChangeListener(null);
                 resetView();
                 this.mView = view;
-                xmMediaPlayer = new XmMediaPlayer(context);
                 xmMediaPlayer.play(name, iDownloadConfig, this);
             }
         }
@@ -81,11 +80,10 @@ public class MediaPlayerManager implements IMediaStateChangeListener {
                 this.mView = view;
                 xmMediaPlayer.play(name, XmMediaPlayer.AUDIO_FILE_TYPE_ASSETS);
             } else {
-                xmMediaPlayer.destroy();
+                xmMediaPlayer.stop();
                 xmMediaPlayer.setiMediaStateChangeListener(null);
                 resetView();
                 this.mView = view;
-                xmMediaPlayer = new XmMediaPlayer(context);
                 xmMediaPlayer.play(name, XmMediaPlayer.AUDIO_FILE_TYPE_ASSETS);
             }
         }

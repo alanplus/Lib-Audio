@@ -13,6 +13,7 @@ import android.os.HandlerThread;
 import android.os.Message;
 import android.support.annotation.IntDef;
 import android.text.TextUtils;
+import android.util.Log;
 
 import com.weici.audio.download.IDownloadConfig;
 import com.weici.audio.download.IMediaStateChangeListener;
@@ -37,8 +38,6 @@ public class XmMediaPlayer
     public static final int AUDIO_FILE_TYPE_NET = 3;
 
     private OkHttpClient okHttpClient;
-
-    private Call call;
 
     @Override
     public void onBufferingUpdate(MediaPlayer mp, int percent) {
@@ -140,18 +139,21 @@ public class XmMediaPlayer
         if (null == okHttpClient || okHttpClient.dispatcher() == null) {
             return;
         }
-        for (Call call : okHttpClient.dispatcher().queuedCalls()) {
-            call.cancel();
-        }
-        for (Call call : okHttpClient.dispatcher().runningCalls()) {
-            call.cancel();
-        }
+        okHttpClient.dispatcher().cancelAll();
         okHttpClient = null;
     }
 
 
     private MediaPlayer getMediaPlayer() {
         if (mMediaPlayer != null) {
+            if (state == IMediaStateChangeListener.STATE_START) {
+                try {
+                    mMediaPlayer.stop();
+
+                } catch (Exception e) {
+                    Log.d("test_audio", Log.getStackTraceString(e));
+                }
+            }
             mMediaPlayer.reset();
             return mMediaPlayer;
         }
@@ -284,12 +286,7 @@ public class XmMediaPlayer
 
         setState(IMediaStateChangeListener.STATE_LOADING, 0);
 
-        if (call != null && !call.isCanceled()) {
-            call.cancel();
-            call = null;
-        }
-
-        call = HttpHelp.download(getHttpClient(), iDownloadConfig.getUrl(), new okhttp3.Callback() {
+        HttpHelp.download(getHttpClient(), iDownloadConfig.getUrl(), new okhttp3.Callback() {
             @Override
             public void onFailure(Call call, IOException e) {
                 setState(IMediaStateChangeListener.STATE_ERROR, IMediaStateChangeListener.ERROR_CANNOT_PLAY);
@@ -386,11 +383,22 @@ public class XmMediaPlayer
         if (file.exists()) {
             file.delete();
         }
+
+        File tempFile = new File(destName + ".temp");
+        if (tempFile.exists()) {
+            tempFile.delete();
+        }
+
         try {
-            file.createNewFile();
-            String s = HttpHelp.handlerResponse(response, file);
+            tempFile.createNewFile();
+            String s = HttpHelp.handlerResponse(response, tempFile);
+            boolean b = new File(s).renameTo(file);
+            if (!b) {
+                throw new Exception("下载失败");
+            }
             setState(IMediaStateChangeListener.STATE_LOADFINISH, 0);
-            play(s, AUDIO_FILE_TYPE_FILE);
+            play(destName, AUDIO_FILE_TYPE_FILE);
+            Log.d("test_audio", "下载完成");
         } catch (Exception e) {
             setState(IMediaStateChangeListener.STATE_ERROR, IMediaStateChangeListener.ERROR_CANNOT_PLAY);
         }
@@ -399,9 +407,9 @@ public class XmMediaPlayer
     public OkHttpClient getHttpClient() {
         if (null == okHttpClient) {
             OkHttpClient.Builder builder = new OkHttpClient.Builder();
-            builder.readTimeout(1, TimeUnit.MINUTES);
-            builder.writeTimeout(1, TimeUnit.MINUTES);
-            builder.connectTimeout(1, TimeUnit.MINUTES);
+            builder.readTimeout(10, TimeUnit.SECONDS);
+            builder.writeTimeout(10, TimeUnit.SECONDS);
+            builder.connectTimeout(10, TimeUnit.SECONDS);
             okHttpClient = builder.build();
         }
         return okHttpClient;
