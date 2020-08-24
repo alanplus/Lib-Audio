@@ -46,7 +46,6 @@ public class AudioDownloadViewHelper implements IAudioDownloadView {
         view.setOnClickListener(v -> {
             if (view instanceof AudioDownloadView) {
                 ((AudioDownloadView) view).onClickEvent();
-
             } else {
                 onClickEvent();
             }

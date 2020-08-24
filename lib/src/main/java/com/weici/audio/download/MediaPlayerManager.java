@@ -313,4 +313,8 @@ public class MediaPlayerManager implements IMediaStateChangeListener {
         }
     }
 
+    public XmMediaPlayer getXmMediaPlayer(){
+        return xmMediaPlayer;
+    }
+
 }

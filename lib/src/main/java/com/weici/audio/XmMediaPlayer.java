@@ -85,6 +85,28 @@ public class XmMediaPlayer
         }
     }
 
+    public void pause() {
+        switch (state) {
+            case IMediaStateChangeListener.STATE_COMPLETE:
+            case IMediaStateChangeListener.STATE_DESTROY:
+            case IMediaStateChangeListener.STATE_ERROR:
+            case IMediaStateChangeListener.STATE_PAUSE:
+            case IMediaStateChangeListener.STATE_STOP:
+                break;
+            case IMediaStateChangeListener.STATE_LOADFINISH:
+            case IMediaStateChangeListener.STATE_LOADING:
+                setState(IMediaStateChangeListener.STATE_IDLE, 0);
+                break;
+            case IMediaStateChangeListener.STATE_PREPARE:
+                setState(IMediaStateChangeListener.STATE_PAUSE, 0);
+                break;
+            case IMediaStateChangeListener.STATE_START:
+                mMediaPlayer.pause();
+                setState(IMediaStateChangeListener.STATE_PAUSE, 0);
+                break;
+        }
+    }
+
     private void playByFile(String name) {
         try {
             MediaPlayer mediaPlayer = getMediaPlayer();
@@ -413,5 +435,11 @@ public class XmMediaPlayer
             okHttpClient = builder.build();
         }
         return okHttpClient;
+    }
+
+    public void start() {
+        if (state == IMediaStateChangeListener.STATE_PAUSE) {
+            mMediaPlayer.start();
+        }
     }
 }
