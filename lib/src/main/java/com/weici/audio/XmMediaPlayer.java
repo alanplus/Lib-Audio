@@ -98,7 +98,8 @@ public class XmMediaPlayer
                 setState(IMediaStateChangeListener.STATE_IDLE, 0);
                 break;
             case IMediaStateChangeListener.STATE_PREPARE:
-                setState(IMediaStateChangeListener.STATE_PAUSE, 0);
+                mMediaPlayer.stop();
+                setState(IMediaStateChangeListener.STATE_STOP, 0);
                 break;
             case IMediaStateChangeListener.STATE_START:
                 mMediaPlayer.pause();
