@@ -127,7 +127,7 @@ public class XmMediaPlayer
     public void stop() {
         if (state == IMediaStateChangeListener.STATE_LOADING || state == IMediaStateChangeListener.STATE_LOADFINISH || state == IMediaStateChangeListener.STATE_PREPARE) {
             setState(IMediaStateChangeListener.STATE_STOP, 0);
-        } else if (state == IMediaStateChangeListener.STATE_START) {
+        } else if (state == IMediaStateChangeListener.STATE_START || state == IMediaStateChangeListener.STATE_PAUSE) {
             try {
                 mMediaPlayer.stop();
                 mMediaPlayer.reset();
@@ -135,7 +135,7 @@ public class XmMediaPlayer
 
             }
             setState(IMediaStateChangeListener.STATE_IDLE, 0);
-        } else if (state == IMediaStateChangeListener.STATE_STOP || state == IMediaStateChangeListener.STATE_PAUSE || state == IMediaStateChangeListener.STATE_DESTROY) {
+        } else if (state == IMediaStateChangeListener.STATE_STOP || state == IMediaStateChangeListener.STATE_DESTROY) {
             setState(IMediaStateChangeListener.STATE_IDLE, 0);
         }
     }
