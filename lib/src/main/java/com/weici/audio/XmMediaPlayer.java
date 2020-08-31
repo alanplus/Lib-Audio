@@ -441,6 +441,7 @@ public class XmMediaPlayer
     public void start() {
         if (state == IMediaStateChangeListener.STATE_PAUSE) {
             mMediaPlayer.start();
+            setState(IMediaStateChangeListener.STATE_START, 0);
         }
     }
 }

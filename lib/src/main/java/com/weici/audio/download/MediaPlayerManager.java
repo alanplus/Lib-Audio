@@ -112,7 +112,7 @@ public class MediaPlayerManager implements IMediaStateChangeListener {
         }
     }
 
-    private void startViewAnimation() {
+    public void startViewAnimation() {
 
         try {
             mView.clearAnimation();

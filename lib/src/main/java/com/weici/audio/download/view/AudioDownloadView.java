@@ -19,6 +19,8 @@ public class AudioDownloadView extends android.support.v7.widget.AppCompatTextVi
 
     protected IDownloadConfig iDownloadConfig;
 
+    protected boolean isPause;
+
     public AudioDownloadView(Context context) {
         this(context, null);
     }
@@ -32,11 +34,36 @@ public class AudioDownloadView extends android.support.v7.widget.AppCompatTextVi
     public void init(Context context, View view, AttributeSet attributeSet) {
         audioDownloadViewHelper = new AudioDownloadViewHelper();
         audioDownloadViewHelper.init(context, view, attributeSet);
+        isPause = false;
     }
 
     @Override
     public void onClickEvent() {
-        audioDownloadViewHelper.onClickEvent();
+        if (isPause) {
+            int state = MediaPlayerManager.getInstance(getContext()).getXmMediaPlayer().getState();
+            switch (state) {
+                case IMediaStateChangeListener.STATE_IDLE:
+                case IMediaStateChangeListener.STATE_LOADING:
+                case IMediaStateChangeListener.STATE_LOADFINISH:
+                case IMediaStateChangeListener.STATE_PREPARE:
+                case IMediaStateChangeListener.STATE_STOP:
+                case IMediaStateChangeListener.STATE_DESTROY:
+                case IMediaStateChangeListener.STATE_ERROR:
+                case IMediaStateChangeListener.STATE_COMPLETE:
+                    audioDownloadViewHelper.onClickEvent();
+                    break;
+                case IMediaStateChangeListener.STATE_START:
+                    MediaPlayerManager.getInstance(getContext()).getXmMediaPlayer().pause();
+                    break;
+                case IMediaStateChangeListener.STATE_PAUSE:
+                    MediaPlayerManager.getInstance(getContext()).getXmMediaPlayer().start();
+                    break;
+            }
+        } else {
+            audioDownloadViewHelper.onClickEvent();
+        }
+
+
     }
 
     @Override
@@ -60,6 +87,10 @@ public class AudioDownloadView extends android.support.v7.widget.AppCompatTextVi
                 autoPlay(num - 1);
             }
         });
+    }
+
+    public void setPauseOrStopWhenPressed(boolean isPause) {
+        this.isPause = isPause;
     }
 
     public interface OnMediaPlayStateListener {
