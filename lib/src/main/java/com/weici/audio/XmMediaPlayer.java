@@ -444,4 +444,18 @@ public class XmMediaPlayer
             setState(IMediaStateChangeListener.STATE_START, 0);
         }
     }
+
+    public int getTotalTime() {
+        if (state == IMediaStateChangeListener.STATE_START) {
+            return mMediaPlayer.getDuration();
+        }
+        return -1;
+    }
+
+    public int getProgress() {
+        if (state == IMediaStateChangeListener.STATE_START) {
+            return mMediaPlayer.getCurrentPosition();
+        }
+        return -1;
+    }
 }
