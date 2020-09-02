@@ -114,4 +114,12 @@ public class AudioDownloadView extends android.support.v7.widget.AppCompatTextVi
 
         void onErrorStateListener(@IMediaStateChangeListener.error int error);
     }
+
+    public int getAudioDuration() {
+        return MediaPlayerManager.getInstance(getContext()).getXmMediaPlayer().getTotalTime();
+    }
+
+    public int getAudioPlayPosition() {
+        return MediaPlayerManager.getInstance(getContext()).getXmMediaPlayer().getProgress();
+    }
 }
