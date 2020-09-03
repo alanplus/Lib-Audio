@@ -458,4 +458,10 @@ public class XmMediaPlayer
         }
         return -1;
     }
+
+    public void seek(int position) {
+        if (getState() == IMediaStateChangeListener.STATE_START || getState() == IMediaStateChangeListener.STATE_PAUSE) {
+            mMediaPlayer.seekTo(position);
+        }
+    }
 }
