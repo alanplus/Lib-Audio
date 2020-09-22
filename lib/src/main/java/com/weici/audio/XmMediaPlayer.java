@@ -120,7 +120,7 @@ public class XmMediaPlayer
     }
 
     public boolean isPlaying() {
-        return state == IMediaStateChangeListener.STATE_LOADING || state == IMediaStateChangeListener.STATE_LOADFINISH || state == IMediaStateChangeListener.STATE_PREPARE || state == IMediaStateChangeListener.STATE_START;
+        return state == IMediaStateChangeListener.STATE_LOADING || state == IMediaStateChangeListener.STATE_LOADFINISH || state == IMediaStateChangeListener.STATE_PREPARE || state == IMediaStateChangeListener.STATE_START || state == IMediaStateChangeListener.STATE_PAUSE;
     }
 
 
