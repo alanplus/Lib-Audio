@@ -293,10 +293,10 @@ public class MediaPlayerManager implements IMediaStateChangeListener {
         if (context == null) {
             return;
         }
-        if (null == toast) {
-            toast = Toast.makeText(context.getApplicationContext(), "", Toast.LENGTH_SHORT);
+        if (null != toast) {
+            toast.cancel();
         }
-        toast.cancel();
+        toast = Toast.makeText(context.getApplicationContext(), "", Toast.LENGTH_SHORT);
         toast.setText(text);
         toast.show();
     }
