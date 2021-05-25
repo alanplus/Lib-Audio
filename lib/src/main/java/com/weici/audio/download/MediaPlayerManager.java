@@ -26,6 +26,8 @@ public class MediaPlayerManager implements IMediaStateChangeListener {
     private static MediaPlayerManager mediaplayerManager;
     private Context context;
 
+    private Toast toast;
+
     private AudioDownloadView.OnMediaPlayStateListener onMediaPlayStateListener;
 
     private MediaPlayerManager(Context context) {
@@ -277,14 +279,30 @@ public class MediaPlayerManager implements IMediaStateChangeListener {
         mView.post(() -> {
             resetView();
             if (error == IMediaStateChangeListener.ERROR_NO_NET) {
-                Toast.makeText(context, "网络无效，请重试", Toast.LENGTH_LONG).show();
+                showToast("网络无效，请重试");
             } else {
-                Toast.makeText(context, "播放失败", Toast.LENGTH_LONG).show();
+                showToast("播放失败");
             }
             if (null != onMediaPlayStateListener) {
                 onMediaPlayStateListener.onErrorStateListener(error);
             }
         });
+    }
+
+    public void showToast(String text) {
+        if (context == null) {
+            return;
+        }
+        if (null == toast) {
+            toast = Toast.makeText(context.getApplicationContext(), "", Toast.LENGTH_SHORT);
+        }
+        toast.cancel();
+        toast.setText(text);
+        toast.show();
+    }
+
+    public Toast getToast() {
+        return toast;
     }
 
     @Override
@@ -308,12 +326,16 @@ public class MediaPlayerManager implements IMediaStateChangeListener {
             mView = null;
             xmMediaPlayer.destroy();
             mediaplayerManager = null;
+            if (null != toast) {
+                toast.cancel();
+                toast = null;
+            }
         } catch (Exception e) {
             Log.e("audio_error", Log.getStackTraceString(e));
         }
     }
 
-    public XmMediaPlayer getXmMediaPlayer(){
+    public XmMediaPlayer getXmMediaPlayer() {
         return xmMediaPlayer;
     }
 
